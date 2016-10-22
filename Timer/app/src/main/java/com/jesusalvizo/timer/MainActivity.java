@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         timerTextView.setText(minutesString + ":" + secondsString);
     }
 
+    //aqui es donde quiero hacer que el tiemnpo se ponga pausa
     public void pause() {
 
         pausebtn.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //aqui quiero hacer que el tiempo se resuma en donde se quedo cuando esta en pausa
     public void resume() {
 
         pausebtn.setOnClickListener(new View.OnClickListener() {
