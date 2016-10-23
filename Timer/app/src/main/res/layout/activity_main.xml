@@ -11,13 +11,45 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.jesusalvizo.timer.MainActivity">
 
-    <SeekBar
-        android:layout_width="match_parent"
+    <Button
+        android:text="Pause"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/controlBtn"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/pauseBtn" />
+
+    <Button
+        android:text="Start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/controlBtn"
+        android:onClick="controlTimer"
+        tools:ignore="HardcodedText"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="14dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        app:srcCompat="@drawable/watch1"
+        android:id="@+id/imageView"
+        android:contentDescription="Egg"
+        tools:ignore="HardcodedText"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/timerSeekBar" />
+        android:layout_centerHorizontal="true"
+        android:layout_height="400dp" />
+
+    <Button
+        android:text="Resume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/resbtn"
+        android:layout_marginEnd="9dp"
+        android:layout_alignBaseline="@+id/pauseBtn"
+        android:layout_alignBottom="@+id/pauseBtn"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -27,49 +59,18 @@
         android:ems="10"
         android:id="@+id/timerTextView"
         android:textAlignment="center"
-        android:textSize="70sp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
+        android:textSize="80sp"
+        tools:ignore="HardcodedText"
+        android:fontFamily="sans-serif-condensed"
+        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        tools:ignore="HardcodedText" />
+        android:layout_marginTop="142dp" />
 
-    <Button
-        android:text="Pause"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/controllerButton"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/pausebtn" />
-
-    <ImageView
+    <SeekBar
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/brownegg"
-        android:id="@+id/imageView"
-        android:contentDescription="Egg"
-        tools:ignore="HardcodedText"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/controllerButton"
-        android:layout_below="@+id/timerSeekBar" />
-
-    <Button
-        android:text="Resume"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/resbtn"
+        android:id="@+id/controlSeekBar"
+        android:layout_marginTop="31dp"
         android:layout_below="@+id/imageView"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="12dp" />
-
-    <Button
-        android:text="Start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/controllerButton"
-        android:onClick="controlTimer"
-        tools:ignore="HardcodedText"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="14dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
 </RelativeLayout>

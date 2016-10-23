@@ -8,7 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import static com.jesusalvizo.timer.R.raw.egg;
+
+import static com.jesusalvizo.timer.R.raw.airhorn;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,34 +18,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // We initialize our objects' instances
-        timerSeekBar = (SeekBar)findViewById(R.id.timerSeekBar);
+        pauseBtn = (Button) findViewById(R.id.pauseBtn);
+        timerSeekBar = (SeekBar)findViewById(R.id.controlSeekBar);
         timerTextView = (TextView)findViewById(R.id.timerTextView);
-        controlButton = (Button)findViewById(R.id.controllerButton);
-        resbtn = (Button) findViewById(R.id.resbtn);
-        pausebtn = (Button) findViewById(R.id.pausebtn);
+        controlBtn = (Button)findViewById(R.id.controlBtn);
+        resBtn = (Button) findViewById(R.id.resbtn);
 
-
-        // We set the maximum number of minutes for our timer (10 minutes = 600 seconds).
-        // We also set our current position at 30 seconds, just as we are displaying in our
-        // user interface.
-        timerSeekBar.setMax(1800);
-        timerSeekBar.setProgress(60);
-
-        // We disable the TextView so the user can't write in it
         timerTextView.setEnabled(false);
 
-        pausebtn.setEnabled(false);
-        pausebtn.setVisibility(View.INVISIBLE);
-        resbtn.setEnabled(false);
-        resbtn.setVisibility(View.INVISIBLE);
+        pauseBtn.setEnabled(false);
+        pauseBtn.setVisibility(View.INVISIBLE);
+        resBtn.setEnabled(false);
+        resBtn.setVisibility(View.INVISIBLE);
 
-        // We define our listener to respond to changes in the seek bar
+        timerSeekBar.setMax(5940);
+        timerSeekBar.setProgress(60);
+
         timerSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // We call our method updateTimer, sending the number of seconds remaining in
-                // our timer
                 updateTimer(progress);
             }
 
@@ -60,36 +52,54 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // We create a SeekBar object to handle the seek bar in our user interface.  This
-    // seek bar will control our timer.  We define this instance as a global object because
-    // we want to access it in several functions within our class.
-    SeekBar timerSeekBar;
+    Button controlBtn;
+    Button pauseBtn;
+    Button resBtn;
 
-    // We create a TextView object to handle the TextView displaying our timer.
     TextView timerTextView;
 
-    // This variable will let us know if we have already started our counter.
-    Boolean counterIsActive = false;
+    SeekBar timerSeekBar;
 
-    // We create a Button object to control our button
-    Button controlButton;
-    Button pausebtn;
-    Button resbtn;
+    Boolean counterIsOn = false;
 
-    // We create a CountDownTimer
-    CountDownTimer countDownTimer;
+    CountDownTimer Timer;
 
-    public void resetTimer() {
-        timerTextView.setText("01:00");
-        timerSeekBar.setProgress(60);
-        countDownTimer.cancel();
-        controlButton.setText("Go!");
-        timerSeekBar.setEnabled(true);
-        counterIsActive = false;
-        pausebtn.setEnabled(false);
-        pausebtn.setVisibility(View.INVISIBLE);
-        resbtn.setEnabled(false);
-        resbtn.setVisibility(View.INVISIBLE);
+    public void controlTimer(View view) {
+
+        if (!counterIsOn) {
+
+            counterIsOn = true;
+            timerSeekBar.setEnabled(false);
+            controlBtn.setText("Stop");
+            pauseBtn.setEnabled(true);
+            pauseBtn.setVisibility(View.VISIBLE);
+            resBtn.setEnabled(true);
+            resBtn.setVisibility(View.VISIBLE);
+
+            Timer = new CountDownTimer(timerSeekBar.getProgress() * 1000 + 100, 1000) {
+
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    updateTimer((int) millisUntilFinished / 1000);
+                }
+
+                @Override
+                public void onFinish() {
+                    timerTextView.setText("00:00");
+                    resetTimer();
+                    MediaPlayer mplayer = MediaPlayer.create(getApplicationContext(), airhorn);
+                    mplayer.start();
+                }
+
+            }.start();
+
+        } else {
+
+            resume();
+            pause();
+            resetTimer();
+
+        }
     }
 
     public void updateTimer(int secondsLeft) {
@@ -109,14 +119,27 @@ public class MainActivity extends AppCompatActivity {
         timerTextView.setText(minutesString + ":" + secondsString);
     }
 
+    public void resetTimer() {
+        timerTextView.setText("01:00");
+        timerSeekBar.setProgress(60);
+        Timer.cancel();
+        controlBtn.setText("Start");
+        timerSeekBar.setEnabled(true);
+        counterIsOn = false;
+        pauseBtn.setEnabled(false);
+        pauseBtn.setVisibility(View.INVISIBLE);
+        resBtn.setEnabled(false);
+        resBtn.setVisibility(View.INVISIBLE);
+    }
+
     //aqui es donde quiero hacer que el tiemnpo se ponga pausa
     public void pause() {
 
-        pausebtn.setOnClickListener(new View.OnClickListener() {
+        pauseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //counterIsActive = false;
-                //countDownTimer.wait();
+                //counterIsOn = false;
+                //Timer.wait(long);
             }
         });
 
@@ -125,63 +148,14 @@ public class MainActivity extends AppCompatActivity {
     //aqui quiero hacer que el tiempo se resuma en donde se quedo cuando esta en pausa
     public void resume() {
 
-        pausebtn.setOnClickListener(new View.OnClickListener() {
+        pauseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //counterIsActive = true;
-                //countDownTimer.
+                //counterIsOn = true;
+                //Timer.go();
             }
         });
 
-    }
-
-    public void controlTimer(View view) {
-
-        // If we have not activated our count down timer:
-        if (!counterIsActive) {
-
-            // We activate our count down timer, disable our seek bar and change the text of
-            // our button
-            counterIsActive = true;
-            timerSeekBar.setEnabled(false);
-            controlButton.setText("Stop");
-            pausebtn.setEnabled(true);
-            pausebtn.setVisibility(View.VISIBLE);
-            resbtn.setEnabled(true);
-            resbtn.setVisibility(View.VISIBLE);
-
-            // We set the timer to the number of seconds specified in the seek bar.  We add a tenth
-            // of a second (100 milliseconds) to the initial value.
-            countDownTimer = new CountDownTimer(timerSeekBar.getProgress() * 1000 + 100, 1000) {
-
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    // We call our method update Timer sending the number of seconds remaining in
-                    // our timer
-                    updateTimer((int) millisUntilFinished / 1000);
-                }
-
-                @Override
-                public void onFinish() {
-                    // We set the text of our timer to "00:00" and play our horn sound
-                    timerTextView.setText("00:00");
-                    resetTimer();
-                    MediaPlayer mplayer = MediaPlayer.create(getApplicationContext(), egg);
-                    mplayer.start();
-                }
-
-            }.start();
-
-
-        } else {
-
-            resume();
-            pause();
-            // If we clicked on our button while our counter was active, then we reset our timer
-            // and cancel our count down
-            resetTimer();
-
-        }
     }
 
 }
